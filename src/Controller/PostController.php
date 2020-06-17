@@ -39,7 +39,6 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setCreator($this->getUser());
             $post->setCreatedAt(new \DateTimeImmutable());
-            $post->setEditedAt(new \DateTimeImmutable());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();
