@@ -6,6 +6,7 @@ use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class PostType extends AbstractType
 {
@@ -14,6 +15,7 @@ class PostType extends AbstractType
         $builder
             ->add('createdAt')
             ->add('editedAt')
+            ->add('imageFile', VichImageType::class, ['required' => false])
             ->add('content')
             ->add('creator')
         ;
