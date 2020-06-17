@@ -3,32 +3,26 @@
 {% block title %}Post{% endblock %}
 
 {% block body %}
-    <h1>Post</h1>
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">{{ post.title }}</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="alert alert-info" role="alert">
+            Posted by <em>{{ post.creator.email }}</em><br>
+            Posted at <abbr title="{{ post.createdAt|date('d-m-Y H:i') }}">{{ post.createdAt|date('d-m-Y') }}</abbr>
+            {% if post.editedAt %}
+                <br>Last edit at <abbr title="{{ post.editedAt|date('d-m-Y H:i') }}">{{ post.editedAt|date('d-m-Y') }}</abbr>
+            {% endif %}
+        </div>
+        <div class="content">
+            {{ post.content|raw }}
+            <a href="{{ path('post_edit', {'id': post.id}) }}"><img src="{{ asset('assets/edit.png') }}" alt="Edit post"></a>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EditedAt</th>
-                <td>{{ post.editedAt ? post.editedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ post.content }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('post_index') }}">back to list</a>
-
-    <a href="{{ path('post_edit', {'id': post.id}) }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('post_index') }}">back to list</a>
 
     {{ include('post/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

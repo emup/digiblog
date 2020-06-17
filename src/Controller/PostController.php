@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/new", name="post_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
@@ -35,6 +37,9 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $post->setCreator($this->getUser());
+            $post->setCreatedAt(new \DateTimeImmutable());
+            $post->setEditedAt(new \DateTimeImmutable());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();
@@ -60,6 +65,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="post_edit", methods={"GET","POST"})
+     * @Security("post.getCreator() == user")
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -67,6 +73,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $post->setEditedAt(new \DateTimeImmutable());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('post_index');
@@ -80,6 +87,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{id}", name="post_delete", methods={"DELETE"})
+     * @Security("post.getCreator() == user")
      */
     public function delete(Request $request, Post $post): Response
     {

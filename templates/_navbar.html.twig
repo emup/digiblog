@@ -11,6 +11,20 @@
                 <li class="nav-item {{ route starts with 'default' ? 'active' }}">
                     <a href="{{ path('default') }}" class="nav-link">Home</a>
                 </li>
+                <li class="nav-item {{ route starts with 'post_index' ? 'active' }}">
+                    <a href="{{ path('post_index') }}" class="nav-link">All posts</a>
+                </li>
+                {% if app.user %}
+                <li class="nav-item dropdown ml-auto">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbar-create" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ asset('assets/create.png') }}" alt="Create">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbar-create">
+                        <a href="{{ path('post_new') }}" class="dropdown-item">New post</a>
+                    </div>
+                </li>
+                {% endif %}
                 <li class="nav-item dropdown {{ not app.user ? 'ml-auto' }}">
                     {% if app.user %}
                         <a href="#" class="nav-link dropdown-toggle" id="navbar-user" role="button"
